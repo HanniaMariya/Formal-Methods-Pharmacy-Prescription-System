@@ -116,6 +116,11 @@ class PharmacySystem:
         if prescriber_id not in self.prescribers:
             raise ValueError("Prescriber is not licensed")
 
+        if patient_id == prescriber_id:
+            raise ValueError(
+                "A prescriber cannot issue a prescription to themselves"
+            )
+
         if quantity <= 0:
             raise ValueError("Quantity must be greater than zero")
 
@@ -330,3 +335,15 @@ if __name__ == "__main__":
 
     except ValueError as e:
         print(e)
+
+    try:
+        system.add_prescriber("P001") # adding patient as prescriber
+        system.IssuePrescription(
+            "RX003",
+            "P001",      # same id
+            "D001",
+            "P001",
+            5
+        )
+    except ValueError as e:
+        print("Error:", e)        
